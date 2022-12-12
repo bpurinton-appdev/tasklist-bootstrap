@@ -21,7 +21,7 @@ class TasksController < ApplicationController
     the_task = Task.new
     the_task.user_id = session[:user_id]
     the_task.body = params.fetch("query_body")
-    the_task.status = "not yet started"
+    # the_task.status = "not yet started"
     # the_task.status = params.fetch("query_status")
 
     if the_task.valid?
