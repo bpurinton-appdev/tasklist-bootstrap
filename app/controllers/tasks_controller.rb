@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   def index
-    matching_tasks = Task.all
+    matching_tasks = @current_user.tasks.all #Task.all
 
     @list_of_tasks = matching_tasks.order({ :created_at => :desc })
 
@@ -19,9 +19,10 @@ class TasksController < ApplicationController
 
   def create
     the_task = Task.new
-    the_task.user_id = params.fetch("query_user_id")
+    the_task.user_id = session[:user_id]
     the_task.body = params.fetch("query_body")
-    the_task.status = params.fetch("query_status")
+    the_task.status = "not yet started"
+    # the_task.status = params.fetch("query_status")
 
     if the_task.valid?
       the_task.save
@@ -41,7 +42,7 @@ class TasksController < ApplicationController
 
     if the_task.valid?
       the_task.save
-      redirect_to("/tasks/#{the_task.id}", { :notice => "Task updated successfully."} )
+      redirect_to("/tasks/#{the_task.id}", { :notice => "Task updated successfully." })
     else
       redirect_to("/tasks/#{the_task.id}", { :alert => the_task.errors.full_messages.to_sentence })
     end
@@ -53,6 +54,6 @@ class TasksController < ApplicationController
 
     the_task.destroy
 
-    redirect_to("/tasks", { :notice => "Task deleted successfully."} )
+    redirect_to("/tasks", { :notice => "Task deleted successfully." })
   end
 end
