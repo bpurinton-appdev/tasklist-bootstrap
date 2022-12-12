@@ -10,4 +10,9 @@
 #  user_id    :integer
 #
 class Task < ApplicationRecord
+  validates :body, presence: true
+  validates :status, presence: true
+  validates :user, presence: true
+
+  belongs_to :user, required: true, class_name: "User", foreign_key: "user_id", counter_cache: true
 end
